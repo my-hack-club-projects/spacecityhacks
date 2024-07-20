@@ -36,7 +36,7 @@ function Entity:draw()
 
         if self.scaleAxis == "x" then
             scaleY = scaleX
-        else
+        elseif self.scaleAxis == "y" then
             scaleX = scaleY
         end
 
