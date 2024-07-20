@@ -22,13 +22,16 @@ function PlayState:enter(prevState)
         if not self.canShoot then
             return
         end
+        self.canShoot = false
 
         if self.revolver:isCocked() then
             local die = self.revolver:shoot()
             if die then
                 print("player dies")
                 return
+            
             end
+            print("player lives")
             -- enemies' turn
             self.game:defer(self.roundInterval, function()
                 self.revolver:cock()
@@ -37,6 +40,8 @@ function PlayState:enter(prevState)
                 if die then
                     print("enemy dies")
                 end
+                print "enemy lives"
+                self.canShoot = true
             end)
         else
             self.revolver:cock()
