@@ -27,6 +27,7 @@ function Entity:draw()
     local w, h = self.size.x * unitSize, self.size.y * unitSize
     local x, y = self.position.x * unitSize, self.position.y * unitSize
 
+    love.graphics.push()
     love.graphics.translate(x, y)
     love.graphics.setColor(self.color:unpack())
 
@@ -46,6 +47,9 @@ function Entity:draw()
     else
         love.graphics.rectangle("fill", -w / 2, -h / 2, w, h)
     end
+
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.pop()
 end
 
 return Entity
