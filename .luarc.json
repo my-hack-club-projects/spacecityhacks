@@ -1,5 +1,8 @@
 {
     "diagnostics.globals": [
         "love"
+    ],
+    "diagnostics.disable": [
+        "need-check-nil"
     ]
 }
