@@ -43,8 +43,6 @@ function Entity:draw()
             scaleX = scaleY
         end
 
-        -- love.graphics.draw(self.image, -w / 2, -h / 2, 0, scaleX, scaleY) -- this is not centered
-
         love.graphics.draw(
             self.image,
             0,
