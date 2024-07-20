@@ -33,17 +33,17 @@ function PlayState:enter(prevState)
     self.player.humanName = "Player"
     self.enemy.humanName = "Enemy"
 
-    self.test = self.entity.new(
-        Entity,
-        {
-            name = "Test",
-            game = self.game,
-            position = Vector2(1, 1),
-            size = Vector2(5, 5),
-            image = love.graphics.newImage("assets/images/revolver.png"),
-            zindex = 999,
-        }
-    )
+    -- self.test = self.entity.new(
+    --     Entity,
+    --     {
+    --         name = "Test",
+    --         game = self.game,
+    --         position = Vector2(1, 1),
+    --         size = Vector2(5, 5),
+    --         image = love.graphics.newImage("assets/images/revolver.png"),
+    --         zindex = 999,
+    --     }
+    -- )
 
     self:loadImages()
 
@@ -70,6 +70,20 @@ function PlayState:loadImages()
             game = self.game,
             image = love.graphics.newImage("assets/images/table.png"),
             scaleAxis = "y",
+            zindex = 1000,
+        }
+    )
+
+    self.playerTest = self.entity.new(
+        Entity,
+        {
+            name = "PlayerTest",
+            game = self.game,
+            position = Vector2(1, 7),
+            size = Vector2(0, 15),
+            image = love.graphics.newImage("assets/images/player.png"),
+            scaleAxis = "y",
+            zindex = 500
         }
     )
 
