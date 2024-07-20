@@ -27,6 +27,7 @@ function PlayState:enter(prevState)
 
     -- Player's turn is first
     self.player:turn(self.revolver, { self.player, self.enemy })
+    -- When the player chooses who to shoot, the next enemy will be determined and the turn function will be called
 end
 
 function PlayState:exit()
