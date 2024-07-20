@@ -75,6 +75,7 @@ end
 
 function Game:load()
     -- runs once on love.load after all states have been loaded
+    math.randomseed(os.time())
 
     assert(self.initial, "No initial state for Game")
     self:setState(self.initial)
