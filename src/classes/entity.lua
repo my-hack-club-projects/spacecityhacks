@@ -9,6 +9,7 @@ function Entity:init(props)
     self.game = props.game or nil
 
     self.position = props.position or Vector2()
+    self.anchorPoint = props.anchorPoint or Vector2(0.5, 0.5)
     self.size = props.size or Vector2()
     self.color = props.color or Color4()
     self.image = props.image or nil
@@ -25,7 +26,8 @@ function Entity:draw()
     local unitSize = self.game.UnitSize
 
     local w, h = self.size.x * unitSize, self.size.y * unitSize
-    local x, y = self.position.x * unitSize, self.position.y * unitSize
+    local x, y = self.position.x * unitSize + w * (self.anchorPoint.x * 2 - 1),
+        self.position.y * unitSize + h * (self.anchorPoint.y * 2 - 1)
 
     love.graphics.push()
     love.graphics.translate(x, y)
@@ -41,9 +43,18 @@ function Entity:draw()
             scaleX = scaleY
         end
 
-        local realSizeScaledX, realSizeScaledY = self.image:getWidth() * scaleX, self.image:getHeight() * scaleY
+        -- love.graphics.draw(self.image, -w / 2, -h / 2, 0, scaleX, scaleY) -- this is not centered
 
-        love.graphics.draw(self.image, -realSizeScaledX / 2, -realSizeScaledY / 2, 0, scaleX, scaleY)
+        love.graphics.draw(
+            self.image,
+            0,
+            0,
+            0,
+            scaleX,
+            scaleY,
+            self.image:getWidth() / 2,
+            self.image:getHeight() / 2
+        )
     else
         love.graphics.rectangle("fill", -w / 2, -h / 2, w, h)
     end

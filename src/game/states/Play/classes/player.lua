@@ -1,15 +1,14 @@
 local oo = require 'libs.oo'
+local Entity = require 'classes.entity'
 
-local Player = oo.class()
+local Player = oo.class(Entity)
 
-function Player:init(game)
-    self.game = game
+function Player:init(props)
+    Entity.init(self, props)
 
     self.isTurn = false
     self.aimingAt = nil
     self.alive = true
-
-    self.humanName = ""
 end
 
 function Player:findNext(targets)
@@ -72,7 +71,7 @@ function Player:turn(revolver, targets)
 end
 
 function Player:die()
-    print(self.humanName .. " dies")
+    print(self.name .. " dies")
     self.alive = false
 end
 
