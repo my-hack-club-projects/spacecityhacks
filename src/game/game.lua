@@ -59,6 +59,8 @@ function Game:init()
     love.textinput = forwardSignal("textinput")
     love.resize = forwardSignal("resize")
 
+    self.defers = {}
+
     -- compute dimensions
     self:computeDimensionsUnit()
 
@@ -115,6 +117,14 @@ end
 function Game:update(dt)
     self.signals.preUpdate:dispatch(dt)
 
+    for i = #self.defers, 1, -1 do
+        local defer = self.defers[i]
+        if love.timer.getTime() - defer.start >= defer.duration then
+            defer.func()
+            table.remove(self.defers, i)
+        end
+    end
+
     if self.current then
         self.current:update(dt)
     end
@@ -130,6 +140,17 @@ function Game:draw()
     end
 
     self.signals.postDraw:dispatch()
+end
+
+function Game:defer(seconds, func)
+    table.insert(
+        self.defers,
+        {
+            start = love.timer.getTime(),
+            duration = seconds,
+            func = func,
+        }
+    )
 end
 
 function Game.__tostring()
