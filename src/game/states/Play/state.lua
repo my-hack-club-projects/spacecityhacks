@@ -39,9 +39,6 @@ end
 
 function PlayState:draw()
     State.draw(self)
-
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.print("DemoState", 10, 10)
 end
 
 return PlayState
