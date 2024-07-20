@@ -5,7 +5,6 @@ function love.load()
     local GameClass = require 'game.game'
 
     Game = GameClass()
-    Game.initial = "DemoState"
 
     -- load config
     Game:loadConfig(config)
