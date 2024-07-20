@@ -62,7 +62,7 @@ return function(moonshine)
     }]]
 
 
-  local setters, light_position = {}
+  local setters, light_position = {}, nil
 
   for _,k in ipairs{"exposure", "decay", "density", "weight"} do
     setters[k] = function(v)
@@ -71,7 +71,7 @@ return function(moonshine)
   end
 
   setters.light_position = function(v)
-    light_position = {unpack(v)}
+    light_position = {table.unpack(v)}
     shader:send("light_position", v)
   end
 
