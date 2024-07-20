@@ -77,6 +77,8 @@ function Game:load()
     -- runs once on love.load after all states have been loaded
     math.randomseed(os.time())
 
+    love.graphics.setDefaultFilter("nearest", "nearest")
+
     assert(self.initial, "No initial state for Game")
     self:setState(self.initial)
 end

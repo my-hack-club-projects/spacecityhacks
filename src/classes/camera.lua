@@ -21,7 +21,7 @@ function Camera:getFovScale()
     return love.graphics.getWidth() / self.horizontalFov / self.game.UnitSize
 end
 
-function Camera:getRealSize()
+function Camera:getUnitSize()
     -- size of the camera in units
 
     return Vector2(love.graphics.getWidth() / self.game.UnitSize / self:getFovScale(),

@@ -1,5 +1,5 @@
 local oo = require 'libs.oo'
-local mathf = require 'libs.mathf'
+local mathf = require 'classes.mathf'
 
 local Color4 = oo.class()
 
@@ -23,7 +23,7 @@ end
 function Color4:init(r, g, b, a)
     self.components = {}
 
-    for i, v in ipairs({ r or 0, g or 0, b or 0, a or 1 }) do
+    for i, v in ipairs({ r or 1, g or 1, b or 1, a or 1 }) do
         self.components[i] = mathf.clamp(v, 0, 1)
     end
 

@@ -10,6 +10,10 @@ function State:init(game)
     self.prevState = nil
     self.camera = nil
 
+    local function sortEntities(a, b)
+        return a.zindex < b.zindex
+    end
+
     self.entity = {
         new = function(entityClass, ...)
             local entity = entityClass(...)
@@ -17,12 +21,16 @@ function State:init(game)
             table.insert(self._entities, entity)
             entity.state = self
 
+            table.sort(self._entities, sortEntities)
+
             return entity
         end,
 
         insert = function(entity)
             table.insert(self._entities, entity)
             entity.state = self
+
+            table.sort(self._entities, sortEntities)
         end,
 
         find = function(name)
@@ -37,13 +45,15 @@ function State:init(game)
             for i, e in ipairs(self._entities) do
                 if e == entity then
                     table.remove(self._entities, i)
+                    table.sort(self._entities, sortEntities)
+
                     return
                 end
             end
         end,
     }
 
-    self._entities = {} -- List of entities attached to this state
+    self._entities = {}
 end
 
 function State:enter(prevState)
