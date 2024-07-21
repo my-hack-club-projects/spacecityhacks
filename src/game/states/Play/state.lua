@@ -1,4 +1,5 @@
 local oo = require 'libs.oo'
+local mathf = require 'classes.mathf'
 local State = require 'classes.state'
 
 local Vector2 = require 'types.vector2'
@@ -20,8 +21,16 @@ function PlayState:init(game)
 
     self.camera = Camera(self.game)
 
-    self.revolver = Revolver()
     self.roundInterval = 2
+    self.revolverPositionOffset = Vector2(5, -1)
+
+    self.revolver = self.entity.new(Revolver, {
+        game = self.game,
+        position = Vector2(),
+        size = Vector2(1, 1) * 5,
+        scaleAxis = "y",
+        zindex = 900,
+    })
 end
 
 function PlayState:enter(prevState)
@@ -29,6 +38,7 @@ function PlayState:enter(prevState)
 
     self.player = self.entity.new(Player, {
         game = self.game,
+        name = "Player",
         image = love.graphics.newImage("assets/images/player.png"),
         scaleAxis = "y",
         zindex = 500,
@@ -36,6 +46,7 @@ function PlayState:enter(prevState)
 
     self.enemy = self.entity.new(Enemy, {
         game = self.game,
+        name = "Enemy",
         image = love.graphics.newImage("assets/images/enemy.png"),
         scaleAxis = "y",
         zindex = 500,
@@ -50,9 +61,33 @@ function PlayState:enter(prevState)
         self:sizeImages()
     end)
 
+    self.player.turnChanged:connect(self.turnChanged, self)
+    self.enemy.turnChanged:connect(self.turnChanged, self)
+
+    self.player.aimed:connect(self.aimed, self)
+    self.enemy.aimed:connect(self.aimed, self)
+
     -- Player's turn is first
     self.player:turn(self.revolver, { self.player, self.enemy })
     -- When the player chooses who to shoot, the next enemy will be determined and the turn function will be called
+end
+
+function PlayState:turnChanged(entity)
+    -- entity is who has the turn now
+
+    self.revolver.position = entity.position + self.revolverPositionOffset * Vector2(-mathf.sign(entity.position.x), 1)
+    self.revolver.size = Vector2(math.abs(self.revolver.size.x) * mathf.sign(entity.position.x), self.revolver.size.y)
+    self.revolver.rotation = -35
+end
+
+function PlayState:aimed(entity)
+    -- aim the gun at the entity
+    local target = entity.aimingAt
+    local xDirection = (target == entity and -1 or 1) * (target == self.player and 1 or -1)
+    local angle = xDirection * (target == entity and 0 or 145)
+
+    self.revolver.rotation = math.rad(angle)
+    self.revolver.size = Vector2(math.abs(self.revolver.size.x) * xDirection, self.revolver.size.y)
 end
 
 function PlayState:loadImages()
@@ -76,16 +111,18 @@ function PlayState:loadImages()
         }
     )
 
-    self.revolverImage = self.entity.new(
-        Entity,
-        {
-            name = "Revolver",
-            game = self.game,
-            image = love.graphics.newImage("assets/images/revolver.png"),
-            size = Vector2(1, 1) * 5,
-            zindex = 1000,
-        }
-    )
+    self.revolver.image = love.graphics.newImage("assets/images/revolver.png")
+
+    -- self.revolverImage = self.entity.new(
+    --     Entity,
+    --     {
+    --         name = "Revolver",
+    --         game = self.game,
+    --         image = love.graphics.newImage("assets/images/revolver.png"),
+    --         size = Vector2(1, 1) * 5,
+    --         zindex = 1000,
+    --     }
+    -- )
 
     self:sizeImages()
 end

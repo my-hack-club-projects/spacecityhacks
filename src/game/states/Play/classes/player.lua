@@ -1,4 +1,5 @@
 local oo = require 'libs.oo'
+local signal = require 'libs.signal'
 local Entity = require 'classes.entity'
 
 local Player = oo.class(Entity)
@@ -9,6 +10,9 @@ function Player:init(props)
     self.isTurn = false
     self.aimingAt = nil
     self.alive = true
+
+    self.turnChanged = signal.new()
+    self.aimed = signal.new()
 end
 
 function Player:findNext(targets)
@@ -35,6 +39,8 @@ function Player:aim(targets)
 
     -- placeholder code (always aim at yourself)
     self.aimingAt = self
+    self.aimed:dispatch(self)
+
     return self
 end
 
@@ -51,22 +57,17 @@ end
 
 function Player:turn(revolver, targets)
     self.isTurn = true
+    self.turnChanged:dispatch(self)
 
     local target = self:aim(targets)
 
     local listener
     listener = self.game.signals.mousepressed:connect(function()
-        if revolver.cocked then
-            -- Shoot the revolver
-            self.isTurn = false
-            listener:disconnect()
+        -- Shoot the revolver
+        self.isTurn = false
+        listener:disconnect()
 
-            self:shoot(revolver, target, targets)
-        else
-            -- Cock the revolver
-            print("Revolver cocked")
-            revolver:cock()
-        end
+        self:shoot(revolver, target, targets)
     end)
 end
 

@@ -1,4 +1,5 @@
 local oo = require 'libs.oo'
+local mathf = require 'classes.mathf'
 local Vector2 = require 'types.vector2'
 local Color4 = require 'types.color4'
 
@@ -11,6 +12,7 @@ function Entity:init(props)
     self.position = props.position or Vector2()
     self.anchorPoint = props.anchorPoint or Vector2(0.5, 0.5)
     self.size = props.size or Vector2()
+    self.rotation = props.rotation or 0
     self.color = props.color or Color4()
     self.image = props.image or nil
     self.scaleAxis = props.scaleAxis
@@ -31,6 +33,7 @@ function Entity:draw()
 
     love.graphics.push()
     love.graphics.translate(x, y)
+    love.graphics.rotate(self.rotation)
     love.graphics.setColor(self.color:unpack())
 
     if self.image then
@@ -38,9 +41,9 @@ function Entity:draw()
         local scaleY = h / self.image:getHeight()
 
         if self.scaleAxis == "x" then
-            scaleY = scaleX
+            scaleY = scaleX * mathf.sign(self.size.y)
         elseif self.scaleAxis == "y" then
-            scaleX = scaleY
+            scaleX = scaleY * mathf.sign(self.size.x)
         end
 
         love.graphics.draw(
@@ -59,6 +62,10 @@ function Entity:draw()
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.pop()
+end
+
+function Entity:__tostring()
+    return self.name
 end
 
 return Entity
