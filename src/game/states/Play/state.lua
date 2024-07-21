@@ -76,6 +76,17 @@ function PlayState:loadImages()
         }
     )
 
+    self.revolverImage = self.entity.new(
+        Entity,
+        {
+            name = "Revolver",
+            game = self.game,
+            image = love.graphics.newImage("assets/images/revolver.png"),
+            size = Vector2(1, 1) * 5,
+            zindex = 1000,
+        }
+    )
+
     self:sizeImages()
 end
 
